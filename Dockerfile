@@ -9,12 +9,15 @@ RUN apt-get update && apt-get install -y \
 
 RUN git clone https://github.com/openvenues/libpostal -b $COMMIT
 
-COPY ./*.sh /libpostal/
-
 WORKDIR /libpostal
+
+COPY ./build_libpostal.sh /libpostal/
 RUN ./build_libpostal.sh
+
+COPY ./build_libpostal_rest.sh /libpostal/
+COPY src/main.go /libpostal/
 RUN ./build_libpostal_rest.sh
 
 EXPOSE 8080
 
-CMD /libpostal/workspace/bin/libpostal-rest
+CMD /libpostal/go/bin/libpostal-rest
